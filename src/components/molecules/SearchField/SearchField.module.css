@@ -1,0 +1,25 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.clearButton {
+  position: absolute;
+  inset-inline-end: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding: var(--spacing-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+}

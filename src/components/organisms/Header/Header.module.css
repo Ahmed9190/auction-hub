@@ -1,0 +1,100 @@
+.header {
+  background-color: var(--color-surface-primary);
+  border-bottom: 1px solid var(--color-gray-200);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.logo {
+  flex-shrink: 0;
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+}
+
+.logoText {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  flex: 1;
+}
+
+.navLink {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-primary-600);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.mobileMenuButton {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  padding: var(--spacing-2);
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav {
+    position: absolute;
+    top: 100%;
+    inset-inline-start: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-surface-primary);
+    border-bottom: 1px solid var(--color-gray-200);
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+
+    &.mobileOpen {
+      max-height: 400px;
+      padding: var(--spacing-4);
+    }
+  }
+
+  .navLink {
+    width: 100%;
+    padding: var(--spacing-3);
+  }
+
+  .container {
+    flex-wrap: wrap;
+  }
+}

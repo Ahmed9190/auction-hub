@@ -1,0 +1,20 @@
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.size-small {
+  width: 16px;
+  height: 16px;
+}
+
+.size-medium {
+  width: 24px;
+  height: 24px;
+}
+
+.size-large {
+  width: 32px;
+  height: 32px;
+}

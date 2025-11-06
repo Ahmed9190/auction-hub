@@ -1,0 +1,32 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns, 3), 1fr);
+  gap: var(--spacing-6);
+  width: 100%;
+
+  @media (max-width: 1200px) {
+    --grid-columns: 2 !important;
+  }
+
+  @media (max-width: 768px) {
+    --grid-columns: 1 !important;
+  }
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-12);
+  color: var(--color-text-secondary);
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--spacing-12);
+  color: var(--color-text-secondary);
+  font-size: 1.125rem;
+}
