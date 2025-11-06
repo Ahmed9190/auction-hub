@@ -1,9 +1,9 @@
-import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
+import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { ENV } from '../../constants/env';
 import { logger } from '../../utils/logger';
 import { API_ENDPOINTS } from './endpoints';
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data: T;
   message?: string;
   status: number;
@@ -35,8 +35,12 @@ export class ApiClient {
         });
         return config;
       },
-      (error) => {
-        logger.error('Request interceptor error', { error });
+      (error: unknown) => {
+        if (error instanceof Error) {
+          logger.error('Request interceptor error', { error: error.message });
+        } else {
+          logger.error('Unknown request interceptor error', { error });
+        }
         return Promise.reject(error);
       }
     );
@@ -51,21 +55,32 @@ export class ApiClient {
         });
         return response;
       },
-      (error: AxiosError) => {
-        if (error.response?.status === 401) {
-          this.logout();
-          logger.warn('Unauthorized - Logging out');
-        }
-
-        logger.error('API Error', {
-          status: error.response?.status,
-          url: error.config?.url,
-          message: error.message,
-        });
-
-        return Promise.reject(error);
+      (error: unknown) => {
+        this.handleRequestError(error);
       }
     );
+  }
+
+  private handleRequestError(error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error;
+      if (axiosError.response?.status === 401) {
+        this.logout();
+        logger.warn('Unauthorized - Logging out');
+      }
+
+      logger.error('API Error', {
+        status: axiosError.response?.status,
+        url: axiosError.config?.url,
+        message: axiosError.message,
+      });
+    } else if (error instanceof Error) {
+      logger.error('API Error', { message: error.message });
+    } else {
+      logger.error('Unknown API Error', { error });
+    }
+
+    return Promise.reject(error);
   }
 
   setToken(token: string): void {
@@ -83,27 +98,35 @@ export class ApiClient {
   }
 
   // Generic GET request
-  async get<T = any>(url: string, config?: any): Promise<AxiosResponse<T>> {
+  async get<T = unknown>(url: string, config?: Record<string, unknown>): Promise<AxiosResponse<T>> {
     return this.client.get<T>(url, config);
   }
 
-  // Generic POST request
-  async post<T = any>(url: string, data?: any, config?: any): Promise<AxiosResponse<T>> {
+  async post<T = unknown>(
+    url: string,
+    data?: Record<string, unknown>,
+    config?: Record<string, unknown>
+  ): Promise<AxiosResponse<T>> {
     return this.client.post<T>(url, data, config);
   }
 
-  // Generic PUT request
-  async put<T = any>(url: string, data?: any, config?: any): Promise<AxiosResponse<T>> {
+  async put<T = unknown>(
+    url: string,
+    data?: Record<string, unknown>,
+    config?: Record<string, unknown>
+  ): Promise<AxiosResponse<T>> {
     return this.client.put<T>(url, data, config);
   }
 
-  // Generic DELETE request
-  async delete<T = any>(url: string, config?: any): Promise<AxiosResponse<T>> {
+  async delete<T = unknown>(url: string, config?: Record<string, unknown>): Promise<AxiosResponse<T>> {
     return this.client.delete<T>(url, config);
   }
 
-  // Generic PATCH request
-  async patch<T = any>(url: string, data?: any, config?: any): Promise<AxiosResponse<T>> {
+  async patch<T = unknown>(
+    url: string,
+    data?: Record<string, unknown>,
+    config?: Record<string, unknown>
+  ): Promise<AxiosResponse<T>> {
     return this.client.patch<T>(url, data, config);
   }
 
@@ -112,7 +135,7 @@ export class ApiClient {
     return this.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
   }
 
-  async register(data: Record<string, any>) {
+  async register(data: Record<string, unknown>) {
     return this.post(API_ENDPOINTS.AUTH.REGISTER, data);
   }
 
@@ -121,7 +144,7 @@ export class ApiClient {
   }
 
   // Properties endpoints
-  async getProperties(params?: Record<string, any>) {
+  async getProperties(params?: Record<string, unknown>) {
     return this.get(API_ENDPOINTS.PROPERTIES.LIST, { params });
   }
 
@@ -130,14 +153,18 @@ export class ApiClient {
   }
 
   async createProperty(data: FormData) {
-    return this.post(API_ENDPOINTS.PROPERTIES.CREATE, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    return this.client.post(API_ENDPOINTS.PROPERTIES.CREATE, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
   }
 
   async updateProperty(id: string, data: FormData) {
-    return this.put(API_ENDPOINTS.PROPERTIES.UPDATE(id), data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    return this.client.put(`${API_ENDPOINTS.PROPERTIES.UPDATE}/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
   }
 
@@ -146,7 +173,7 @@ export class ApiClient {
   }
 
   // Contact endpoint
-  async submitContact(data: Record<string, any>) {
+  async submitContact(data: Record<string, unknown>) {
     return this.post(API_ENDPOINTS.CONTACT, data);
   }
 }

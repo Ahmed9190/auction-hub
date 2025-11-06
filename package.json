@@ -20,11 +20,13 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@vitejs/plugin-react-swc": "^4.1.0",
     "axios": "^1.13.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.5",
+    "terser": "^5.27.0",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
     "web-vitals": "^5.1.0"
