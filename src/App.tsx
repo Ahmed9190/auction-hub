@@ -1,30 +1,30 @@
-import React, { useEffect } from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from './design-system/context/ThemeProvider';
-import { AuthProvider } from './design-system/context/AuthProvider';
-import { ErrorBoundary } from './components/templates/ErrorBoundary/ErrorBoundary';
-import { routes } from './config/routes';
-import { validateEnvironment } from './constants/env';
-import { logger } from './utils/logger';
-import './design-system/styles/globals.css';
+import React, { useEffect } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./design-system/context/ThemeProvider";
+import { AuthProvider } from "./design-system/context/AuthProvider";
+import { ErrorBoundary } from "./components/templates/ErrorBoundary/ErrorBoundary";
+import { routes } from "./config/routes";
+import { validateEnvironment } from "./constants/env";
+import { logger } from "./utils/logger";
+import "./design-system/styles/globals.css";
 
 // Initialize app
 try {
   validateEnvironment();
 } catch (error) {
-  logger.error('Failed to validate environment', {
+  logger.error("Failed to validate environment", {
     error: error instanceof Error ? error.message : String(error),
   });
   throw error;
 }
 
 const router = createBrowserRouter(routes, {
-  basename: '/',
+  basename: process.env.PUBLIC_URL || "/",
 });
 
 const App: React.FC = () => {
   useEffect(() => {
-    logger.info('Application initialized', {
+    logger.info("Application initialized", {
       environment: import.meta.env.MODE,
       timestamp: new Date().toISOString(),
     });
@@ -33,7 +33,7 @@ const App: React.FC = () => {
      * Handle unhandled promise rejections
      */
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      logger.error('Unhandled promise rejection', {
+      logger.error("Unhandled promise rejection", {
         reason: event.reason instanceof Error ? event.reason.message : String(event.reason),
       });
     };
@@ -43,23 +43,23 @@ const App: React.FC = () => {
      */
     const handleError = (event: ErrorEvent) => {
       try {
-        logger.error('Global error', {
+        logger.error("Global error", {
           message: event.message,
           filename: event.filename,
           lineno: event.lineno,
           colno: event.colno,
         });
       } catch (logError) {
-        console.error('Failed to log global error:', event.message);
+        console.error("Failed to log global error:", event.message);
       }
     };
 
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
-    window.addEventListener('error', handleError);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+    window.addEventListener("error", handleError);
 
     return () => {
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
-      window.removeEventListener('error', handleError);
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
+      window.removeEventListener("error", handleError);
     };
   }, []);
 
