@@ -5,25 +5,32 @@
 }
 
 .container {
-  max-width: 1440px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--spacing-4);
 }
 
 .content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: var(--spacing-8);
   padding: var(--spacing-12) var(--spacing-4);
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: var(--spacing-6);
     padding: var(--spacing-8) var(--spacing-4);
   }
 
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-4);
+    padding: var(--spacing-6) var(--spacing-4);
+  }
+
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+    gap: var(--spacing-4);
   }
 }
 
@@ -34,14 +41,14 @@
 }
 
 .sectionTitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   margin: 0;
 }
 
 .description {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
   margin: 0;
@@ -50,6 +57,7 @@
 .socialLinks {
   display: flex;
   gap: var(--spacing-3);
+  flex-wrap: wrap;
 }
 
 .socialLink {
@@ -79,7 +87,7 @@
   gap: var(--spacing-2);
 
   a {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     color: var(--color-text-secondary);
     text-decoration: none;
     transition: color 0.2s ease;
@@ -100,13 +108,17 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--color-text-secondary);
   text-decoration: none;
   transition: color 0.2s ease;
 
   &:hover {
     color: var(--color-primary-600);
+  }
+
+  svg {
+    flex-shrink: 0;
   }
 }
 
@@ -130,7 +142,7 @@
 }
 
 .copyright {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: var(--color-text-secondary);
   margin: 0;
 }
@@ -139,7 +151,9 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
 
   a {
     color: var(--color-text-secondary);
